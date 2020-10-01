@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_woo_process_import_export_ept"
+            model="ir.ui.view">
+        <field name="name">Process Import/Export</field>
+        <field name="model">woo.process.import.export</field>
+        <field name="priority">11</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group name="woo_instance">
+                        <group>
+                            <field name="woo_instance_id"
+                                   options="{'no_create':True,'no_create_edit': True}"
+                                   required="1"/>
+                        </group>
+                        <group>
+                            <field name="woo_operation" required="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <div name="msg_opr_main">
+                            <div
+                                    attrs="{'invisible':[('woo_operation','!=','import_product')]}">
+                                <p colspan="2" class="alert alert-warning" role="alert">
+                                    <u>
+                                        <h3 style="font-weight:bold;color:#7d5a29">Note :</h3>
+                                    </u>
+                                    <b>
+                                        <ol>
+                                            <li>
+                                                Sync product starts fetching product data from
+                                                WooCommerce store and will
+                                                just add that data in Product
+                                                Queue for
+                                                processing. (WooCommerce -&gt;
+                                                Queues -&gt; Product
+                                                Data Queues)
+                                            </li>
+                                            <li>
+                                                A Scheduled/Cron Job, running in background will
+                                                start
+                                                processing Queues one by one.
+                                            </li>
+                                            <li style="color:#eb4034">
+                                                Queue will be deleted automatically after 7 days of creation. It will be created when you perform the Import Product operation again as per your need.
+                                            </li>
+                                        </ol>
+                                    </b>
+                                </p>
+                            </div>
+                            <div
+                                    attrs="{'invisible':[('woo_operation','!=','import_customer')]}">
+                                <p colspan="2" class="alert alert-warning" role="alert">
+                                    <u>
+                                        <h3 style="font-weight:bold;color:#7d5a29">Note :</h3>
+                                    </u>
+                                    <b>
+                                        <ol>
+                                            <li>
+                                                Import customers starts fetching customers data
+                                                from
+                                                WooCommerce store and will just add that
+                                                data in Customer
+                                                Queue for processing.
+                                                (WooCommerce -&gt; Queues -&gt;
+                                                Customer Data Queues)
+                                            </li>
+                                            <li>
+                                                A Scheduled/Cron Job, running in background will
+                                                start
+                                                processing Queues one by one.
+                                            </li>
+                                            <li style="color:#eb4034">
+                                                Queue will be deleted automatically after 7 days of creation. It will be created when you perform the Import Product operation again as per your need.
+                                            </li>
+                                        </ol>
+                                    </b>
+                                </p>
+                            </div>
+                            <div
+                                    attrs="{'invisible':[('woo_operation','!=','import_orders')]}">
+                                <p colspan="2" class="alert alert-warning" role="alert">
+                                    <u>
+                                        <h3 style="font-weight:bold;color:#7d5a29">Note :</h3>
+                                    </u>
+                                    <b>
+                                        <ol>
+                                            <li>
+                                                It will start fetching Order data from
+                                                WooCommerce
+                                                store
+                                                and will just add that data
+                                                in Order Queue for processing.
+                                                (WooCommerce -&gt; Queues -&gt; Order Data
+                                                Queues)
+                                            </li>
+                                            <li>
+                                                A Scheduled/Cron Job, running in background will
+                                                start
+                                                processing Queues one by one.
+                                            </li>
+                                            <li>
+                                                Orders are fetched based on order status
+                                                configured in
+                                                particular instance.
+                                            </li>
+                                            <li>
+                                                It will try to fetches the Orders based on
+                                                dates specified
+                                                in 'From' and 'To' fields below.
+                                                <ul>
+                                                    <li>
+                                                        If 'From' and 'To' values are not
+                                                        specified, it
+                                                        will
+                                                        fetch
+                                                        the orders prior to current date and
+                                                        time
+                                                    </li>
+                                                    <li>
+                                                        If only 'From' value is specified, it
+                                                        will fetch the
+                                                        orders
+                                                        starting from the value in 'From' till
+                                                        current
+                                                        date
+                                                        and time.
+                                                    </li>
+                                                    <li>
+                                                        If only 'To' value is specified, it will
+                                                        fetch the
+                                                        orders
+                                                        prior to 'To' value given.
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li style="color:#eb4034">
+                                                Queue will be deleted automatically after 7 days of creation. It will be created when you perform the Import Product operation again as per your need.
+                                            </li>
+                                        </ol>
+                                    </b>
+                                </p>
+                            </div>
+                            <div
+                                    attrs="{'invisible':[('woo_operation','!=','is_update_order_status')]}">
+                                <p colspan="2" class="alert alert-warning" role="alert">
+                                    <u>
+                                        <h3 style="font-weight:bold;color:#7d5a29">Note :</h3>
+                                    </u>
+                                    <b>
+                                        <ol>
+                                            <li>
+                                                The Update Order Status allows you to change the
+                                                order
+                                                status as 'Completed' at Woocommerce store.
+                                            </li>
+                                        </ol>
+                                    </b>
+                                </p>
+                            </div>
+                            <div class="text-muted"
+                                 attrs="{'invisible':[('woo_operation','!=','is_export_products')]}">
+                                It creates new products in Woocommerce store from Odoo as
+                                per the options selected below.
+                            </div>
+                            <div
+                                    attrs="{'invisible':[('woo_operation','!=','import_product_tags')]}">
+                                <p colspan="2" class="alert alert-warning" role="alert">
+                                    <u>
+                                        <h3 style="font-weight:bold;color:#7d5a29">Note :</h3>
+                                    </u>
+                                    <b>
+                                        <ol>
+                                            <li>
+                                                Tags allow you synchronize Woocommerce
+                                                store's product tags to Odoo.
+                                            </li>
+                                        </ol>
+                                    </b>
+                                </p>
+                            </div>
+                            <div
+                                    attrs="{'invisible':[('woo_operation','!=','import_attribute')]}">
+                                <p colspan="2" class="alert alert-warning" role="alert">
+                                    <u>
+                                        <h3 style="font-weight:bold;color:#7d5a29">Note :</h3>
+                                    </u>
+                                    <b>
+                                        <ol>
+                                            <li>
+                                                Import attributes allow you synchronize
+                                                Woocommerce
+                                                store's attributes to Odoo.
+                                            </li>
+                                        </ol>
+                                    </b>
+                                </p>
+                            </div>
+                            <div
+                                    attrs="{'invisible':[('woo_operation','!=','import_category')]}">
+                                <p colspan="2" class="alert alert-warning" role="alert">
+                                    <u>
+                                        <h3 style="font-weight:bold;color:#7d5a29">Note :</h3>
+                                    </u>
+                                    <b>
+                                        <ol>
+                                            <li>
+                                                Import Categories allow you synchronize
+                                                Woocommerce
+                                                store's categories to Odoo.
+                                            </li>
+                                        </ol>
+                                    </b>
+                                </p>
+                            </div>
+                            <div
+                                    attrs="{'invisible':[('woo_operation','!=','import_coupon')]}">
+                                <p colspan="2" class="alert alert-warning" role="alert">
+                                    <u>
+                                        <h3 style="font-weight:bold;color:#7d5a29">Note :</h3>
+                                    </u>
+                                    <b>
+                                        <ol>
+                                            <li>
+                                                Sync Coupon starts fetching Coupon data from
+                                                WooCommerce
+                                                store and will
+                                                just add that data in Coupon Queue for
+                                                processing. (WooCommerce -&gt;
+                                                Queues -&gt; Coupon Data
+                                                Queues)
+                                            </li>
+                                            <li>
+                                                A Scheduled/Cron Job, running in background will
+                                                start
+                                                processing Queues one by one.
+                                            </li>
+                                            <li style="color:#eb4034">
+                                                Queue will be deleted automatically after 7 days of creation. It will be created when you perform the Import Product operation again as per your need.
+                                            </li>
+                                        </ol>
+                                    </b>
+                                </p>
+                            </div>
+                            <div
+                                    attrs="{'invisible':[('woo_operation','!=','import_stock')]}">
+                                <p colspan="2" class="alert alert-warning" role="alert">
+                                    <u>
+                                        <h3 style="font-weight:bold;color:#7d5a29">Note :</h3>
+                                    </u>
+                                    <b>
+                                        <ol>
+                                            <li>
+                                                Import stock allows to stock from
+                                                WooCommerce store to Odoo.
+                                            </li>
+                                            <li>
+                                                Stock will be imported to warehouse as per the
+                                                configuration instance. You can see the
+                                                inventory here:
+                                                Inventory -> Operations -> Inventory
+                                                Adjustments.
+                                            </li>
+                                        </ol>
+                                    </b>
+                                </p>
+                            </div>
+                            <div
+                                    attrs="{'invisible':[('woo_operation','!=','export_stock')]}">
+                                <p colspan="2" class="alert alert-warning" role="alert">
+                                    <u>
+                                        <h3 style="font-weight:bold;color:#7d5a29">Note :</h3>
+                                    </u>
+                                    <b>
+                                        <ol>
+                                            <li>
+                                                It will export product stock from Odoo to
+                                                Woocommerce
+                                                from the warehouse configured under selected
+                                                instance.
+                                            </li>
+                                            <li>
+                                                It will export stock of only those products
+                                                which are
+                                                already synchronized with Woocommerce store.
+                                            </li>
+                                            <li>
+                                                It will try to export stock of those products
+                                                whose
+                                                stock is updated since last execution of this
+                                                operation.
+                                            </li>
+                                            <li>
+                                                If last execution details are not available, it
+                                                will
+                                                consider those products whose stock is updated
+                                                since last
+                                                30 days.
+                                            </li>
+                                        </ol>
+                                    </b>
+                                </p>
+                            </div>
+                            <div
+                                    attrs="{'invisible':[('woo_operation','!=','update_tags')]}">
+                                <p colspan="2" class="alert alert-warning" role="alert">
+                                    <u>
+                                        <h3 style="font-weight:bold;color:#7d5a29">Note :</h3>
+                                    </u>
+                                    <b>
+                                        <ol>
+                                            The Update Tags allows you to update the tags in
+                                            Woocommerce store.
+                                        </ol>
+                                    </b>
+                                </p>
+                            </div>
+                            <div
+                                    attrs="{'invisible':[('woo_operation','!=','export_tags')]}">
+                                <p colspan="2" class="alert alert-warning" role="alert">
+                                    <u>
+                                        <h3 style="font-weight:bold;color:#7d5a29">Note :</h3>
+                                    </u>
+                                    <b>
+                                        <ol>
+                                            <li>
+                                                The Export Tags allows you to export the tags in
+                                                Woocommerce store.
+                                            </li>
+                                        </ol>
+                                    </b>
+                                </p>
+                            </div>
+                            <div
+                                    attrs="{'invisible':[('woo_operation','!=','update_category')]}">
+                                <p colspan="2" class="alert alert-warning" role="alert">
+                                    <u>
+                                        <h3 style="font-weight:bold;color:#7d5a29">Note :</h3>
+                                    </u>
+                                    <b>
+                                        <ol>
+                                            <li>
+                                                The Update Categories allows you to update the
+                                                Category
+                                                in
+                                                Woocommerce store.
+                                            </li>
+                                        </ol>
+                                    </b>
+                                </p>
+                            </div>
+                            <div
+                                    attrs="{'invisible':[('woo_operation','!=','export_category')]}">
+                                <p colspan="2" class="alert alert-warning" role="alert">
+                                    <u>
+                                        <h3 style="font-weight:bold;color:#7d5a29">Note :</h3>
+                                    </u>
+                                    <b>
+                                        <ol>
+                                            <li>
+                                                The Export Categories allows you to export the
+                                                Category
+                                                in
+                                                Woocommerce store.
+                                            </li>
+                                        </ol>
+                                    </b>
+                                </p>
+                            </div>
+                            <div
+                                    attrs="{'invisible':[('woo_operation','!=','update_coupon')]}">
+                                <p colspan="2" class="alert alert-warning" role="alert">
+                                    <u>
+                                        <h3 style="font-weight:bold;color:#7d5a29">Note :</h3>
+                                    </u>
+                                    <b>
+                                        <ol>
+                                            <li>
+                                                The Update Coupons allows you to update the
+                                                Coupons in
+                                                Woocommerce store.
+                                            </li>
+                                        </ol>
+                                    </b>
+                                </p>
+                            </div>
+                            <div
+                                    attrs="{'invisible':[('woo_operation','!=','export_coupon')]}">
+                                <p colspan="2" class="alert alert-warning" role="alert">
+                                    <u>
+                                        <h3 style="font-weight:bold;color:#7d5a29">Note :</h3>
+                                    </u>
+                                    <b>
+                                        <ol>
+                                            <li>
+                                                The Export Coupons allows you to export the
+                                                Coupons in
+                                                Woocommerce store.
+                                            </li>
+                                        </ol>
+                                    </b>
+                                </p>
+                            </div>
+                        </div>
+                    </group>
+                    <notebook
+                            attrs="{'invisible': [('woo_operation', 'not in', ['import_product','import_orders','export_stock'])]}">
+                        <page string='Sync Option'>
+                            <group name='woo_sync_products'
+                                   attrs="{'invisible':[('woo_operation','!=','import_product')]}">
+                                <group>
+                                    <field name="import_products_method"
+                                           attrs="{'required':[('woo_operation','=','import_product')]}"/>
+                                    <field name="woo_skip_existing_product"/>
+                                </group>
+                            </group>
+                            <group name="woo_import_orders"
+                                   attrs="{'invisible':[('woo_operation','!=','import_orders')]}">
+                                <group>
+                                    <field name="orders_after_date"
+                                           attrs="{'required':[('woo_operation','=','import_orders')]}"/>
+                                    <field name="orders_before_date"
+                                           attrs="{'required':[('woo_operation','=','import_orders')]}"/>
+                                </group>
+                            </group>
+                            <group name="export_stock"
+                                   attrs="{'invisible':[('woo_operation','!=','export_stock')]}">
+                                <group>
+                                    <field name="export_stock_from"
+                                           attrs="{'required':[('woo_operation','=','export_stock')]}"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button string="Execute" class="oe_highlight"
+                                type="object" name="execute"/>
+                        <button string="Cancel" class="oe_highlight"
+                                special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- View of Update Products Action of woo product template ept model @Dipak
+        Gogiya -->
+    <record id="view_woo_update_selected_products_from_action"
+            model="ir.ui.view">
+        <field name="name">Woo Update Products</field>
+        <field name="model">woo.process.import.export</field>
+        <field name="priority">11</field>
+        <field name="arch" type="xml">
+            <form string="Update Products">
+                <sheet>
+                    <p colspan="2" class="alert alert-danger" role="alert">
+                        <h3 style="font-weight:bold;color:#7d5a29">Important Note:</h3>
+                        <ol>
+                            <li>
+                                If multiple products are selected, a maximum of 80 products
+                                can
+                                be processed at a
+                                time.
+                            </li>
+                        </ol>
+                    </p>
+                    <group name='Update Product'>
+                        <group>
+                            <field name="woo_basic_detail"
+                                   string="Update Basic Details"/>
+                            <field name='woo_is_set_price' string="Update Price"/>
+                        </group>
+                        <group>
+                            <field name='woo_is_set_image' string="Update Image"/>
+                            <field name='woo_publish'/>
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="Update Products" class="oe_highlight"
+                                type="object" name="update_products"/>
+                        <button string="Cancel" class="oe_highlight"
+                                special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- View of Export Products Action of woo product template ept model @Dipak
+        Gogiya -->
+    <record id="view_woo_export_selected_products_from_action"
+            model="ir.ui.view">
+        <field name="name">Sync Woo Product Form Action</field>
+        <field name="model">woo.process.import.export</field>
+        <field name="priority">11</field>
+        <field name="arch" type="xml">
+            <form string="Export Products">
+                <sheet>
+                    <p colspan="2" class="alert alert-danger" role="alert">
+                        <h3 style="font-weight:bold;color:#7d5a29">Important Note:</h3>
+                        <ol>
+                            <li>
+                                If multiple products are selected, a maximum of 80 products
+                                can
+                                be processed at a
+                                time.
+                            </li>
+                            <li>
+                                Already exported products will be skipped.
+                            </li>
+                        </ol>
+                    </p>
+                    <group name='Export Product'>
+                        <group>
+                            <field name="woo_basic_detail" readonly="1"/>
+                            <field name='woo_is_set_price'/>
+                        </group>
+                        <group>
+                            <field name='woo_is_set_image'/>
+                            <field name="woo_publish" required="1"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="Export Products" class="oe_highlight"
+                                type="object" name="woo_export_products"/>
+                        <button string="Cancel" class="oe_highlight"
+                                special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- View for export category @Haresh Mori on date 13/12/2019 -->
+    <record id="view_woo_update_export_category_tags_coupons"
+            model="ir.ui.view">
+        <field name="name">Update/Export Woo Category and Tags</field>
+        <field name="model">woo.process.import.export</field>
+        <field name="priority">11</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group class="alert alert-warning" role="alert">
+                        <div style="padding:5px">
+                            <h5 invisible="context.get('process','') != 'update_tags'">
+                                It will only update those Tags in Woocommerce
+                                store, which are already exported.
+                            </h5>
+                            <h5 invisible="context.get('process','') != 'export_tags'">
+                                It will only export those Tags in Woocommerce
+                                store, which are yet not exported.
+                            </h5>
+                            <h5
+                                    invisible="context.get('process','') != 'update_category'">
+                                It will only update those Categories in Woocommerce
+                                store, which are already exported.
+                            </h5>
+                            <h5
+                                    invisible="context.get('process','') != 'export_category'">
+                                It will only export those Categories in Woocommerce
+                                store, which are yet not exported.
+                            </h5>
+                            <h5 invisible="context.get('process','') != 'update_coupon'">
+                                It will only update those Coupons in
+                                Woocommerce
+                                store, which are already exported.
+                            </h5>
+                            <h5 invisible="context.get('process','') != 'export_coupon'">
+                                It will only export those Coupons in
+                                Woocommerce
+                                store, which are yet not exported.
+                            </h5>
+                        </div>
+                    </group>
+                    <footer>
+                        <button string="Execute" class="oe_highlight"
+                                type="object"
+                                name="update_export_category_tags_coupons_in_woo"/>
+                        <button string="Cancel" class="oe_highlight"
+                                special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="action_wizard_woo_processes_ept"
+            model="ir.actions.act_window">
+        <field name="name">WooCommerce Operations</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">woo.process.import.export</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_woo_process_import_export_ept"/>
+        <field name="target">new</field>
+    </record>
+
+    <record
+            id="action_wizard_woo_instance_import_export_operations"
+            model="ir.actions.act_window">
+        <field name="name">WooCommerce Operations</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">woo.process.import.export</field>
+        <field name="view_mode">form</field>
+        <field name="context">{'default_woo_instance_id': active_id}</field>
+        <field name="view_id" ref="view_woo_process_import_export_ept"/>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Action of Export Products of woo product template ept model @Dipak
+        Gogiya -->
+    <act_window name="Export New Product in Woo Commerce"
+                res_model="woo.process.import.export"
+                binding_model="woo.product.template.ept" view_mode="form"
+                target="new" id="action_wizard_woo_export_selected_products"
+                view_id="view_woo_export_selected_products_from_action"
+                context="{'process':'export_products'}"/>
+
+    <!-- Action of Update Products of woo product template ept model @Dipak
+        Gogiya -->
+    <act_window name="Update Existing Product in Woo Commerce"
+                res_model="woo.process.import.export"
+                binding_model="woo.product.template.ept" view_mode="form"
+                target="new" id="action_wizard_woo_update_selected_products"
+                view_id="view_woo_update_selected_products_from_action"
+                context="{'process':'update_products', 'default_woo_basic_detail': False}"/>
+
+    <!-- This action use for update product category in Woo @Haresh Mori on
+        date 13/12/2019 -->
+    <act_window name="Update Product Category In Woo"
+                res_model="woo.process.import.export"
+                binding_model="woo.product.categ.ept" view_mode="form" target="new"
+                id="action_update_product_category"
+                view_id="view_woo_update_export_category_tags_coupons"
+                context="{'process':'update_category'}"/>
+
+    <!-- This action use for export product category in Woo @Haresh Mori on
+        date 14/12/2019 -->
+    <act_window name="Export Product Category In Woo"
+                res_model="woo.process.import.export"
+                binding_model="woo.product.categ.ept" view_mode="form" target="new"
+                id="action_export_product_category"
+                view_id="view_woo_update_export_category_tags_coupons"
+                context="{'process':'export_category'}"/>
+
+    <!-- Update Product Tags Action By Maulik Barad on Date 13-Dec-2019. -->
+    <act_window name="Update Tags in WooCommerce"
+                res_model="woo.process.import.export" binding_model="woo.tags.ept"
+                view_mode="form" target="new" id="action_woo_update_tags"
+                view_id="view_woo_update_export_category_tags_coupons"
+                context="{'process':'update_tags'}"/>
+
+    <!-- Export Product Tags Action By Maulik Barad on Date 14-Dec-2019. -->
+    <act_window name="Export Tags in WooCommerce"
+                res_model="woo.process.import.export" binding_model="woo.tags.ept"
+                view_mode="form" target="new" id="action_woo_export_tags"
+                view_id="view_woo_update_export_category_tags_coupons"
+                context="{'process':'export_tags'}"/>
+
+    <!-- Export coupons by Nilesh Parmar on Date 16 Dec 2019. -->
+    <act_window name="Export Coupons in WooCommerce"
+                res_model="woo.process.import.export" binding_model="woo.coupons.ept"
+                view_mode="form" target="new" id="action_woo_export_coupons"
+                view_id="view_woo_update_export_category_tags_coupons"
+                context="{'process':'export_coupon'}"/>
+
+    <!-- Export coupons by Nilesh Parmar on Date 16 Dec 2019. -->
+    <act_window name="Update Coupons in WooCommerce"
+                res_model="woo.process.import.export" binding_model="woo.coupons.ept"
+                view_mode="form" target="new" id="action_woo_update_coupons"
+                view_id="view_woo_update_export_category_tags_coupons"
+                context="{'process':'update_coupon'}"/>
+
+    <menuitem id="menu_woo_processes_ept"
+              parent="woo_commerce_ept.woo_commerce_main_menu" name="Processes"
+              groups="woo_commerce_ept.group_woo_ept" sequence="15"/>
+
+    <menuitem id="menu_woo_import_export_process_ept"
+              name="WooCommerce Operations" parent="menu_woo_processes_ept"
+              action="action_wizard_woo_processes_ept" sequence="20"/>
+
+</odoo>

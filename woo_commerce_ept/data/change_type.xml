@@ -1,0 +1,6 @@
+<odoo>
+    <data>
+        <!-- Migration for "project_service_profiling". Can be skipped if that module is not in use. -->
+        <function model="woo.instance.ept" name="copy_product_template_data"/>
+    </data>
+</odoo>
