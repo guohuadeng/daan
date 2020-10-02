@@ -1,0 +1,85 @@
+<?xml version="1.0" ?>
+<odoo>
+
+    <record id="woo_inherit_view_of_common_log_book_tree_view_ept"
+            model="ir.ui.view">
+        <field name="name">Woo Commerce Instance in Log book Tree</field>
+        <field name="model">common.log.book.ept</field>
+        <field name="inherit_id"
+               ref="common_connector_library.action_common_log_book_ept_tree"/>
+        <field name="arch" type="xml">
+            <field name="create_date" position="after">
+                <field name="woo_instance_id"></field>
+            </field>
+        </field>
+    </record>
+
+    <record id="common_log_book_search_view_ept" model="ir.ui.view">
+        <field name="name">Common Log Search View</field>
+        <field name="model">common.log.book.ept</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <search string="Common Logs">
+                <field name="name"/>
+                <field name="type"/>
+                <group expand="0" string="Group By...">
+                    <filter name="instance" string="Instance" icon="terp-personal"
+                            context="{'group_by':'woo_instance_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="woo_inherit_view_of_common_log_book_form_ept"
+            model="ir.ui.view">
+        <field name="name">Woo Commerce Instance in Log book Form</field>
+        <field name="model">common.log.book.ept</field>
+        <field name="inherit_id"
+               ref="common_connector_library.action_common_log_book_ept_form"/>
+        <field name="arch" type="xml">
+            <field name="active" position="after">
+                <field name="woo_instance_id" readonly="1"></field>
+            </field>
+            <field name="log_lines" position="inside">
+                <tree create="false" edit="false">
+                    <field name="message"/>
+                    <field name="model_id"/>
+                </tree>
+            </field>
+        </field>
+    </record>
+
+    <record id="action_common_log_book_instance_ept" model="ir.actions.act_window">
+        <field name="name">WooCommerce Mismatch Details</field>
+        <field name="res_model">common.log.book.ept</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('woo_instance_id','=',active_id)]</field>
+        <field name="view_id" ref="woo_inherit_view_of_common_log_book_tree_view_ept"/>
+        <field name="help" type="html">
+            <div>
+                <br/>
+                <br/>
+                <br/>
+                <p>
+                    <b>No WooCommerce Mismatch Details available right now.</b>
+                </p>
+            </div>
+        </field>
+    </record>
+
+    <record id="action_common_log_book_ept_woo_instances" model="ir.actions.act_window">
+        <field name="name">Woo Common Log Book</field>
+        <field name="res_model">common.log.book.ept</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('woo_instance_id','!=',False)]</field>
+    </record>
+
+    <menuitem id="woo_log_ept" name="Log Details"
+              parent="woo_commerce_ept.woo_commerce_main_menu" sequence="20"/>
+
+    <menuitem id="woo_mismatch_ept" name="Mismatch Details"
+              parent="woo_commerce_ept.woo_log_ept"
+              action="woo_commerce_ept.action_common_log_book_ept_woo_instances"
+              sequence="26"/>
+
+</odoo>
